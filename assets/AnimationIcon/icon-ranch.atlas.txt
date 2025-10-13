@@ -1,0 +1,181 @@
+
+icon-ranch.png
+size: 1780,332
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Bunny 1
+  rotate: false
+  xy: 326, 131
+  size: 158, 196
+  orig: 158, 196
+  offset: 0, 0
+  index: -1
+Bunny 2
+  rotate: false
+  xy: 2, 131
+  size: 160, 196
+  orig: 160, 196
+  offset: 0, 0
+  index: -1
+Bunny 3
+  rotate: false
+  xy: 164, 131
+  size: 160, 196
+  orig: 160, 196
+  offset: 0, 0
+  index: -1
+Chicken 1
+  rotate: false
+  xy: 876, 2
+  size: 124, 154
+  orig: 124, 154
+  offset: 0, 0
+  index: -1
+Chicken 2
+  rotate: false
+  xy: 750, 2
+  size: 124, 154
+  orig: 124, 154
+  offset: 0, 0
+  index: -1
+Chicken 3
+  rotate: false
+  xy: 624, 2
+  size: 124, 154
+  orig: 124, 154
+  offset: 0, 0
+  index: -1
+Chicken 4
+  rotate: false
+  xy: 498, 2
+  size: 124, 154
+  orig: 124, 154
+  offset: 0, 0
+  index: -1
+Cow 1
+  rotate: false
+  xy: 878, 174
+  size: 177, 153
+  orig: 177, 153
+  offset: 0, 0
+  index: -1
+Cow 2
+  rotate: false
+  xy: 1181, 19
+  size: 176, 153
+  orig: 176, 153
+  offset: 0, 0
+  index: -1
+Cow 3
+  rotate: false
+  xy: 1002, 19
+  size: 177, 153
+  orig: 177, 153
+  offset: 0, 0
+  index: -1
+Cow 4
+  rotate: false
+  xy: 1236, 174
+  size: 176, 153
+  orig: 176, 153
+  offset: 0, 0
+  index: -1
+Cow 5
+  rotate: false
+  xy: 1057, 174
+  size: 177, 153
+  orig: 177, 153
+  offset: 0, 0
+  index: -1
+Horse 1
+  rotate: false
+  xy: 748, 158
+  size: 128, 169
+  orig: 128, 169
+  offset: 0, 0
+  index: -1
+Horse 2
+  rotate: false
+  xy: 486, 158
+  size: 129, 169
+  orig: 129, 169
+  offset: 0, 0
+  index: -1
+Horse 3
+  rotate: false
+  xy: 617, 158
+  size: 129, 169
+  orig: 129, 169
+  offset: 0, 0
+  index: -1
+Pig 1
+  rotate: false
+  xy: 151, 7
+  size: 146, 122
+  orig: 146, 122
+  offset: 0, 0
+  index: -1
+Pig 2
+  rotate: false
+  xy: 299, 7
+  size: 146, 122
+  orig: 146, 122
+  offset: 0, 0
+  index: -1
+Pig 3
+  rotate: false
+  xy: 2, 7
+  size: 147, 122
+  orig: 147, 122
+  offset: 0, 0
+  index: -1
+Sheep 1
+  rotate: false
+  xy: 1359, 28
+  size: 180, 144
+  orig: 180, 144
+  offset: 0, 0
+  index: -1
+Sheep 2
+  rotate: false
+  xy: 1541, 37
+  size: 180, 144
+  orig: 180, 144
+  offset: 0, 0
+  index: -1
+Sheep 3
+  rotate: false
+  xy: 1414, 183
+  size: 180, 144
+  orig: 180, 144
+  offset: 0, 0
+  index: -1
+Sheep 4
+  rotate: false
+  xy: 1596, 183
+  size: 180, 144
+  orig: 180, 144
+  offset: 0, 0
+  index: -1
+eye 1
+  rotate: false
+  xy: 878, 159
+  size: 13, 13
+  orig: 13, 13
+  offset: 0, 0
+  index: -1
+eye 2
+  rotate: false
+  xy: 893, 159
+  size: 13, 13
+  orig: 13, 13
+  offset: 0, 0
+  index: -1
+heart
+  rotate: false
+  xy: 447, 63
+  size: 49, 66
+  orig: 49, 66
+  offset: 0, 0
+  index: -1
