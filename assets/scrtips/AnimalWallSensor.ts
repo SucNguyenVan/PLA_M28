@@ -52,7 +52,6 @@ export class AnimalWallSensor extends Component {
     if (!this.node.getComponent(RigidBody2D)) {
       console.warn('[AnimalWallSensor] Missing RigidBody2D on animal. Add RigidBody2D (Kinematic/Dynamic, gravityScale=0).');
     }
-    console.log("col", this._col)
     this._col.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
   }
 
@@ -67,11 +66,9 @@ export class AnimalWallSensor extends Component {
   }
 
   private onBeginContact(self: Collider2D, other: Collider2D, _contact: IPhysics2DContact | null) {
-    console.log("le xinh")
     if (this._hitOnce) return;
 
     const name = (other?.node?.name || '').toLowerCase();
-    console.log({name})
     let which: 'Top' | 'Right' | 'Bottom' | 'Left' | null = null;
 
     if (name.includes('topwall')) which = 'Top';

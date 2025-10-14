@@ -84,6 +84,7 @@ export class AnimalMoverOutSimpleAnim extends Component {
 
   // ===== Main click =====
   private async onClick() {
+    this.node.emit("start-move-top", this.node, this.facing)
     if (this._moving) return;
 
     const board = this.getBoard();

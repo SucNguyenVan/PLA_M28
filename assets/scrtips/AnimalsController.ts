@@ -1,6 +1,15 @@
 import { _decorator, Component, Node, sp } from "cc";
 import { moveNodeAToB } from "./NodeMover";
+import { Dir } from "./Dir";
+import { distanceWorldXY } from "./Distance";
 const { ccclass, property } = _decorator;
+
+enum StartMoveVector {
+  TopLeft = 1,
+  TopRight = 2,
+  BottomLeft = 3,
+  BottomRight = 4,
+}
 
 @ccclass("AnimalsController")
 export class AnimalsController extends Component {
@@ -17,10 +26,44 @@ export class AnimalsController extends Component {
   @property({ type: Node })
   barPoint: Node;
 
+  animalVectorStore: Record<string, StartMoveVector> = {};
+
   onEnable() {
     this.node.children.forEach((childNode) => {
       childNode?.on("hit-left-wall", () => this.moveFromLeft(childNode), this);
-      childNode?.on("hit-right-wall", () => this.moveFromRight(childNode), this);
+      childNode?.on(
+        "hit-right-wall",
+        () => this.moveFromRight(childNode),
+        this
+      );
+      childNode?.on("hit-top-wall", () => this.moveFromTop(childNode), this);
+      childNode?.on(
+        "hit-bottom-wall",
+        () => this.moveFromBottom(childNode),
+        this
+      );
+      childNode?.on("start-move-top", (animalNode: Node, facing: Dir) => {
+        console.log({ animalNode, facing });
+        if (
+          distanceWorldXY(animalNode, this.concertPoint1) <=
+          distanceWorldXY(animalNode, this.concertPoint2)
+        ) {
+          this.animalVectorStore[animalNode.name] = StartMoveVector.TopLeft;
+        } else {
+          this.animalVectorStore[animalNode.name] = StartMoveVector.TopRight;
+        }
+      });
+      childNode?.on("start-move-bottom", (animalNode: Node, facing: Dir) => {
+        console.log({ animalNode, facing });
+        if (
+          distanceWorldXY(animalNode, this.concertPoint3) <=
+          distanceWorldXY(animalNode, this.concertPoint4)
+        ) {
+          this.animalVectorStore[animalNode.name] = StartMoveVector.BottomRight;
+        } else {
+          this.animalVectorStore[animalNode.name] = StartMoveVector.BottomLeft;
+        }
+      });
     });
   }
   onDisable() {
@@ -69,11 +112,33 @@ export class AnimalsController extends Component {
     await moveNodeAToB(childNode, this.barPoint);
   }
 
-    async moveFromRight(childNode: Node) {
+  async moveFromRight(childNode: Node) {
     console.log("[Parent] nhận ping trực tiếp từ con:", childNode);
     this.setAnimalAnimation(childNode, "f_move", true);
     await moveNodeAToB(childNode, this.concertPoint3);
     this.setAnimalAnimation(childNode, "l_move", true);
+    await moveNodeAToB(childNode, this.wayToBarPoint);
+    this.setAnimalAnimation(childNode, "f_move", true);
+    await moveNodeAToB(childNode, this.barPoint);
+  }
+
+  async moveFromTop(childNode: Node) {
+    console.log("animalVectorStore", this.animalVectorStore);
+    if (this.animalVectorStore[childNode.name] === StartMoveVector.TopLeft) {
+      this.setAnimalAnimation(childNode, "l_move", true);
+      await moveNodeAToB(childNode, this.concertPoint1);
+    }
+    await this.moveFromLeft(childNode);
+  }
+
+  async moveFromBottom(childNode: Node) {
+    if (
+      this.animalVectorStore[childNode.name] === StartMoveVector.BottomRight
+    ) {
+      this.setAnimalAnimation(childNode, "l_move", true);
+    } else {
+      this.setAnimalAnimation(childNode, "r_move", true);
+    }
     await moveNodeAToB(childNode, this.wayToBarPoint);
     this.setAnimalAnimation(childNode, "f_move", true);
     await moveNodeAToB(childNode, this.barPoint);
