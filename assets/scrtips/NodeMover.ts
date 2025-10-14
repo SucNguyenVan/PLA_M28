@@ -21,8 +21,8 @@ const { ccclass } = _decorator;
 export function moveNodeAToB(
   nodeA: Node,
   nodeB: Node,
-  speed: number = 120,
-  stopDistance: number = 2,
+  speed: number = 150,
+  stopDistance: number = 40,
   follow: boolean = false
 ): Promise<void> {
   // Đảm bảo có component chạy update để di chuyển

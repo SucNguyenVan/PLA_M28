@@ -2,6 +2,9 @@ import { _decorator, Component, Node, sp } from "cc";
 import { moveNodeAToB } from "./NodeMover";
 import { Dir } from "./Dir";
 import { distanceWorldXY } from "./Distance";
+import { SlotSpawnManager } from "./SlotSpawnManager";
+import { AnimalType } from "./AnimalType";
+import { AnimalMoverOutSimpleAnim } from "./AnimalMoverSimple";
 const { ccclass, property } = _decorator;
 
 enum StartMoveVector {
@@ -108,8 +111,7 @@ export class AnimalsController extends Component {
     await moveNodeAToB(childNode, this.concertPoint4);
     this.setAnimalAnimation(childNode, "r_move", true);
     await moveNodeAToB(childNode, this.wayToBarPoint);
-    this.setAnimalAnimation(childNode, "f_move", true);
-    await moveNodeAToB(childNode, this.barPoint);
+    await this.goToBar(childNode);
   }
 
   async moveFromRight(childNode: Node) {
@@ -118,8 +120,7 @@ export class AnimalsController extends Component {
     await moveNodeAToB(childNode, this.concertPoint3);
     this.setAnimalAnimation(childNode, "l_move", true);
     await moveNodeAToB(childNode, this.wayToBarPoint);
-    this.setAnimalAnimation(childNode, "f_move", true);
-    await moveNodeAToB(childNode, this.barPoint);
+    await this.goToBar(childNode);
   }
 
   async moveFromTop(childNode: Node) {
@@ -140,7 +141,23 @@ export class AnimalsController extends Component {
       this.setAnimalAnimation(childNode, "r_move", true);
     }
     await moveNodeAToB(childNode, this.wayToBarPoint);
-    this.setAnimalAnimation(childNode, "f_move", true);
-    await moveNodeAToB(childNode, this.barPoint);
+    await this.goToBar(childNode);
+  }
+
+  async goToBar(animalNode: Node) {
+    this.setAnimalAnimation(animalNode, "f_move", true);
+    await moveNodeAToB(animalNode, this.barPoint);
+    const slotSpawnManagerScript = this.barPoint.getComponent(SlotSpawnManager);
+    if (slotSpawnManagerScript) {
+      const animalMoverOutSimpleAnimScript = animalNode.getComponent(
+        AnimalMoverOutSimpleAnim
+      );
+      if (animalMoverOutSimpleAnimScript) {
+        slotSpawnManagerScript.triggerSpawn(
+          animalMoverOutSimpleAnimScript.animalType
+        );
+        animalNode.active = false
+      }
+    }
   }
 }

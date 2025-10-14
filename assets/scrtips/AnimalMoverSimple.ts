@@ -46,11 +46,11 @@ export class AnimalMoverOutSimpleAnim extends Component {
   })
   boardNode: Node | null = null;
 
-  @property({ tooltip: "Tốc độ di chuyển (px/giây)" })
-  speed: number = 800;
+  // @property({ tooltip: "Tốc độ di chuyển (px/giây)" })
+  speed: number = 150;
 
   @property({ tooltip: "Khoảng chạy vượt ra ngoài mép board (px)" })
-  outDistance: number = 80;
+  outDistance: number = 40;
 
   // ---- Animation (sp.Skeleton) ----
   @property({
