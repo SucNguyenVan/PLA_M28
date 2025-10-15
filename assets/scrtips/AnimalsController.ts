@@ -128,11 +128,16 @@ export class AnimalsController extends Component {
     if (this.animalVectorStore[childNode.name] === StartMoveVector.TopLeft) {
       this.setAnimalAnimation(childNode, "l_move", true);
       await moveNodeAToB(childNode, this.concertPoint1);
+      await this.moveFromLeft(childNode);
+    }else if(this.animalVectorStore[childNode.name] === StartMoveVector.TopRight){
+      this.setAnimalAnimation(childNode, "r_move", true);
+      await moveNodeAToB(childNode, this.concertPoint2);
+      await this.moveFromRight(childNode);
     }
-    await this.moveFromLeft(childNode);
   }
 
   async moveFromBottom(childNode: Node) {
+    console.log(this.animalVectorStore[childNode.name])
     if (
       this.animalVectorStore[childNode.name] === StartMoveVector.BottomRight
     ) {
