@@ -4,7 +4,6 @@ import {
   Component,
   Node,
   Input,
-  EventTouch,
   tween,
   Vec3,
   Enum,
@@ -27,11 +26,9 @@ type Probe = { canGo: boolean; endR: number; endC: number; hitEdge: boolean };
 
 @ccclass("AnimalMoverOutSimpleAnim")
 export class AnimalMoverOutSimpleAnim extends Component {
-  @property({
-    type: AnimalTypeEnumSelect,
-    tooltip: "loại thức ăn",
-  })
+  @property({ type: AnimalTypeEnumSelect, tooltip: "loại thức ăn" })
   animalType: AnimalType;
+
   // ---- Cấu hình hướng & board ----
   @property({
     type: Enum(Dir),
@@ -84,12 +81,6 @@ export class AnimalMoverOutSimpleAnim extends Component {
 
   // ===== Main click =====
   private async onClick() {
-    if (this.facing === Dir.Up) {
-      this.node.emit("start-move-top", this.node, this.facing);
-    } else if (this.facing === Dir.Down) {
-      this.node.emit("start-move-bottom", this.node, this.facing);
-    }
-
     if (this._moving) return;
 
     const board = this.getBoard();
@@ -108,7 +99,19 @@ export class AnimalMoverOutSimpleAnim extends Component {
     const cur = this.resolveCurrentRC(board);
     if (!cur) return;
 
-    // 2) Ô kế tiếp theo hướng facing
+    // 2) Chọn hướng có thể đi: ưu tiên facing, rồi thử 3 hướng còn lại (xoay CW)
+    const chosen = this.pickFirstAvailableDir(board, cur.r, cur.c, this.facing);
+    if (chosen == null) {
+      // không có hướng nào đi được
+      this.playIdleIfAny();
+      return;
+    }
+
+    // 3) Cập nhật facing theo hướng được chọn + emit event tương ứng
+    if (this.facing !== chosen) this.facing = chosen;
+    if (this.facing === Dir.Up) this.node.emit("start-move-top", this.node, this.facing);
+    else if (this.facing === Dir.Down) this.node.emit("start-move-bottom", this.node, this.facing);
+
     const { dr, dc } = this.dirDelta(this.facing);
     const nr = cur.r + dr;
     const nc = cur.c + dc;
@@ -117,7 +120,7 @@ export class AnimalMoverOutSimpleAnim extends Component {
     const outImmediately =
       nr < 0 || nr >= board.rows || nc < 0 || nc >= board.cols;
 
-    // 3) Nếu còn trong board, CHỈ kiểm tra ô KẾ TIẾP (nếu bị chắn thì dừng)
+    // (Với hướng đã chọn) nếu còn trong board, CHỈ kiểm tra ô KẾ TIẾP (nếu bị chắn thì dừng)
     if (!outImmediately) {
       const probe: Probe = board.straightLineTarget(cur.r, cur.c, dr, dc);
       if (this.debugLogs)
@@ -166,6 +169,42 @@ export class AnimalMoverOutSimpleAnim extends Component {
 
     this._moving = false;
     this.playIdleIfAny(); // nếu có idle
+  }
+
+  // ===== Direction picking =====
+  /**
+   * Trả về hướng khả dụng đầu tiên theo thứ tự:
+   * 1) facing hiện tại
+   * 2) quay phải (CW +1)
+   * 3) quay tiếp (CW +2)
+   * 4) quay tiếp (CW +3) ~ ngược lại
+   * Điều kiện "đi được":
+   *  - Nếu bước đầu ra ngoài board -> OK
+   *  - Nếu còn trong board: straightLineTarget(cur, dir).canGo == true (tức ô kế tiếp trống)
+   */
+  private pickFirstAvailableDir(board: any, r: number, c: number, facing: Dir): Dir | null {
+    const seq: Dir[] = [
+      facing,
+      ((facing + 1) % 4) as Dir,
+      ((facing + 2) % 4) as Dir,
+      ((facing + 3) % 4) as Dir,
+    ];
+
+    for (const d of seq) {
+      const { dr, dc } = this.dirDelta(d);
+      const nr = r + dr;
+      const nc = c + dc;
+
+      const outImmediately =
+        nr < 0 || nr >= board.rows || nc < 0 || nc >= board.cols;
+
+      if (outImmediately) return d;
+
+      // còn trong board -> chỉ cần ô kế tiếp không bị chắn
+      const probe: Probe = board.straightLineTarget(r, c, dr, dc);
+      if (probe && probe.canGo) return d;
+    }
+    return null;
   }
 
   // ===== Helpers =====
